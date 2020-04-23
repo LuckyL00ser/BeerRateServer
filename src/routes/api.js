@@ -1,14 +1,17 @@
 import express from 'express';
-import userController from '../controllers/user.controller'
+import userRoutes from './userRoutes';
+import beerRoutes from './beerRoutes'
+import breweryRoutes from './breweryRoutes'
+import commentRoutes from './commentRoutes'
+import opinionRoutes from './opinionRoutes'
+
+
 const router = express.Router();
+router.use('/users',userRoutes);
+router.use('/breweries',breweryRoutes);
+router.use('/beers',beerRoutes);
+router.use('/comments',commentRoutes);
+router.use('/opinions',opinionRoutes);
 
 
-router.get('/users',userController.index)
-router.get('/users/:id',userController.getById)
-router.post('/users/login',userController.authenticate)
-router.post('/users/register',userController.create)
-router.put('/users/:id',userController.update)
-router.delete('/users',userController.remove)
-
-
-export default  router;
+export default router;

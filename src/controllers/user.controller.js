@@ -3,7 +3,6 @@ import bcrypt from 'bcryptjs';
 import User from '../models/user';
 
 
-
 const authenticate = function (req, res,next) {
 
     User.findOne({username:req.body.username}, (err,result)=>{
@@ -11,7 +10,7 @@ const authenticate = function (req, res,next) {
         else{
             if (bcrypt.compareSync(req.body.password, result.hash)) {
                 const { hash, ...userWithoutHash } = result._doc;
-                const token = jwt.sign( {id:result._id} , process.env.SECRET);
+                const token = jwt.sign( {id:result._id} , process.env.SECRET,{expiresIn:'20m'});
                 res.send({token,...userWithoutHash})
             }
             else
@@ -20,10 +19,8 @@ const authenticate = function (req, res,next) {
     })
 };
 
-
-
 const getById = function (req, res,next) {
-    User.findOne({_id:req.params.id}).select('-hash').exec((err,result)=>{
+    User.findOne({_id:req.params.id},(err,result)=>{
         if(err) next(err);
         else
             res.send(result);
@@ -32,7 +29,7 @@ const getById = function (req, res,next) {
 
 const index =  function (req, res,next) {
 
-    User.find({}).select('-hash').exec((err,result)=>{
+    User.find({},(err,result)=>{
         if(err) next(err);
         else
             res.send(result);
@@ -50,7 +47,7 @@ const create = function (req, res, next) {
     })
 };
 const update = function (req, res,next) {
-    User.findOne({_id:req.params.id},(err,result)=>{
+    User.findOne({_id:req.params.id}).select('hash').exec((err,result)=>{
         if(err) return next(err);
         //zmiana hasła
         if(req.body.oldPassword && req.body.password){
