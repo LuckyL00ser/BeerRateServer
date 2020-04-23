@@ -7,7 +7,6 @@ import apiRoutes from './routes/api';
 import jwt from './helpers/jwt';
 
 dotenv.config();
-console.log(process.env.SECRET)
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
