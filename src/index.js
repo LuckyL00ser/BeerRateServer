@@ -9,11 +9,7 @@ import errorHandler from './helpers/errorHandler'
 
 dotenv.config();
 const app = express();
-//static files
-if(process.env.NODE_ENV === 'production'){
-    app.use(express.static(`${__dirname}/public/`));
-    app.get(/.*/,(req,res)=>res.sendFile(`${__dirname}/public/index.html`));
-}
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -21,6 +17,12 @@ app.use(cors());
 app.use(jwt());
 app.use('/api',apiRoutes);
 app.use(errorHandler);
+
+//static files
+if(process.env.NODE_ENV === 'production'){
+    app.use(express.static(`${__dirname}/public/`));
+    app.get(/.*/,(req,res)=>res.sendFile(`${__dirname}/public/index.html`));
+}
 
 
 const port = process.env.PORT || 8080;
