@@ -3,22 +3,6 @@ import bcrypt from 'bcryptjs';
 import User from '../models/user';
 
 
-const authenticate = function (req, res,next) {
-
-    User.findOne({username:req.body.username}, (err,result)=>{
-        if(err) next(err);
-        else{
-            if (bcrypt.compareSync(req.body.password, result.hash)) {
-                const { hash, ...userWithoutHash } = result._doc;
-                const token = jwt.sign( {id:result._id} , process.env.SECRET,{expiresIn:'20m'});
-                res.send({token,...userWithoutHash})
-            }
-            else
-                res.status(401).send('Incorrect password')
-        }
-    })
-};
-
 const getById = function (req, res,next) {
     User.findOne({_id:req.params.id},(err,result)=>{
         if(err) next(err);
@@ -43,11 +27,12 @@ const create = function (req, res, next) {
 
     User.create(req.body,(err,result)=>{
         if(err) return next(err);
+        delete result.hash;
         res.send(result);
     })
 };
 const update = function (req, res,next) {
-    User.findOne({_id:req.params.id}).select('hash').exec((err,result)=>{
+    User.findOne({_id:req.params.id}).select(['hash','username','email']).exec((err,result)=>{
         if(err) return next(err);
         //zmiana hasła
         if(req.body.oldPassword && req.body.password){
@@ -62,8 +47,8 @@ const update = function (req, res,next) {
         result.save(function(error){
             if(error)
                 return next(error);
-            const {hash, ...objectWithoutHash} = result._doc;
-            res.send({...objectWithoutHash})
+            const {hash, ...user} = result._doc;
+            res.send({user})
         });
 
     })
@@ -78,5 +63,5 @@ const remove = function (req, res,next) {
     )
 };
 
-export default {getById,index,create,update,remove,authenticate}
+export default {getById,index,create,update,remove}
 

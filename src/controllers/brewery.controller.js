@@ -27,7 +27,7 @@ const index =  function (req, res,next) {
     })
 };
 const create = function (req, res, next) {
-    
+    req.body.owner = req.body.user_id
     Brewery.create(req.body,(err,result)=>{
         if(err) return next(err);
         res.send(result);

@@ -5,9 +5,9 @@ const router = express.Router();
 
 router.get('/',beerController.index)
 router.get('/:id',beerController.getById)
-router.post('/register',beerController.create)
+router.post('/',beerController.create)
 router.put('/:id',beerController.update)
-router.delete('/',beerController.remove)
+router.delete('/:id',beerController.remove)
 
 
 export default  router;

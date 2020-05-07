@@ -5,10 +5,10 @@ const router = express.Router();
 
 router.get('/',breweryController.index)
 router.get('/:id',breweryController.getById)
-router.get('/:id',breweryController.getNearbyBreweries)
-router.post('/register',breweryController.create)
+router.get('/getNearby',breweryController.getNearbyBreweries)
+router.post('/',breweryController.create)
 router.put('/:id',breweryController.update)
-router.delete('/',breweryController.remove)
+router.delete('/:id',breweryController.remove)
 
 
 export default  router;

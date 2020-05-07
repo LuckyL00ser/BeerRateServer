@@ -16,9 +16,11 @@ const brewerySchema = new mongoose.Schema({
             required: true
         }
     },
+    address: {type:String, required:true},
     email: {type: String},
     phone: {type: String},
     description: {type:String},
+    image: {type:String},
     createdDate: { type: Date, default: Date.now }
 });
 brewerySchema.index({'location':'2dsphere'});

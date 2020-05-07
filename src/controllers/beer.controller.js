@@ -1,7 +1,7 @@
 import Beer from '../models/beer';
 
 const getById = function (req, res,next) {
-    Beer.findOne({_id:req.params.id},(err,result)=>{
+    Beer.findOne({_id:req.params.id}).populate(['beerType','brewery']).exec((err,result)=>{
         if(err) next(err);
         else
             res.send(result);
@@ -9,7 +9,7 @@ const getById = function (req, res,next) {
 };
 
 const index =  function (req, res,next) {
-    Beer.find({...req.params},(err,result)=>{
+    Beer.find({...req.params}).populate(['beerType','brewery']).exec((err,result)=>{
         if(err) next(err);
         else
             res.send(result);

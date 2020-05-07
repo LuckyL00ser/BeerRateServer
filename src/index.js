@@ -4,26 +4,24 @@ import cors from 'cors';
 import dotenv from 'dotenv'
 import connectDb from './helpers/db';
 import apiRoutes from './routes/api';
-import jwt from './helpers/jwt';
+import authController from './controllers/auth.controller';
 import errorHandler from './helpers/errorHandler'
 
 dotenv.config();
 const app = express();
 
 
+
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors());
-app.use(jwt());
-app.use('/api',apiRoutes);
+
+app.use('/api',authController.verify,apiRoutes);
+//
+
 app.use(errorHandler);
-
-//static files
-if(process.env.NODE_ENV === 'production'){
-    app.use(express.static(`${__dirname}/public/`));
-    app.get(/.*/,(req,res)=>res.sendFile(`${__dirname}/public/index.html`));
-}
-
+app.use(express.static(`${__dirname}/public/`));
+app.get(/.*/,(req,res)=>res.sendFile(`${__dirname}/public/index.html`));
 
 const port = process.env.PORT || 8080;
 

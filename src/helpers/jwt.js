@@ -13,9 +13,8 @@ function jwt() {
         ]
     });
 }
-
+//TODO:: implement revoking tokense
 async function isRevoked(req, payload, done) {
-    console.log(payload)
     User.findById(payload.id,(err,res)=>{
         if(err) return done(null,true)
         done();

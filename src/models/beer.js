@@ -4,8 +4,7 @@ const beerSchema = new mongoose.Schema({
     beerType: {
         type: [{
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'BeerType',
-            unique: true
+            ref: 'BeerType'
         }]
     },
     brewery: {
