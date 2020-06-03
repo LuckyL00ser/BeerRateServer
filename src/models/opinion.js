@@ -4,8 +4,8 @@ const opinionSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, ref: 'User',
         required: true,
     },
-    beer: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Beer',
+    object: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
     description: {type:String},

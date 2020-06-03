@@ -27,12 +27,12 @@ const create = function (req, res, next) {
 
     User.create(req.body,(err,result)=>{
         if(err) return next(err);
-        delete result.hash;
-        res.send(result);
+        const {hash, ...user} = result._doc;
+        res.send(user);
     })
 };
 const update = function (req, res,next) {
-    User.findOne({_id:req.params.id}).select(['hash','username','email']).exec((err,result)=>{
+    User.findOne({_id:req.params.id}).select(['hash','username','email','createdDate','avatarImage','userRole']).exec((err,result)=>{
         if(err) return next(err);
         //zmiana hasła
         if(req.body.oldPassword && req.body.password){
@@ -42,8 +42,15 @@ const update = function (req, res,next) {
                 return next('Old password is incorrect')
             }
         }
-        result.username = req.body.username;
-        result.email = req.body.email;
+        if(req.body.username)
+            result.username = req.body.username;
+        if(req.body.email)
+            result.email = req.body.email;
+        if(req.body.avatarImage)
+            result.avatarImage = req.body.avatarImage;
+        if(req.body.userRole)
+            result.userRole = req.body.userRole;
+
         result.save(function(error){
             if(error)
                 return next(error);

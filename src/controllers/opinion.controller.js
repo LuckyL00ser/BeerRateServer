@@ -9,7 +9,7 @@ const getById = function (req, res,next) {
 };
 
 const index =  function (req, res,next) {
-    Opinion.find({...req.params},(err,result)=>{
+    Opinion.find({...req.query}).sort({createdDate: -1}).populate(['user']).exec((err,result)=>{
         if(err) next(err);
         else
             res.send(result);

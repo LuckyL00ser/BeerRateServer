@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 const brewerySchema = new mongoose.Schema({
     name: { type: String, unique: true, required: true },
-    owner: {
+    user: {
         type: mongoose.Schema.Types.ObjectId, ref: 'User',
         required: true,
     },

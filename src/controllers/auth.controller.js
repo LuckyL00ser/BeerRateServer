@@ -10,7 +10,7 @@ function generateTokens(user)  {
             type: 'ACCESS_TOKEN'
         },
         process.env.SECRET, {
-            expiresIn: 120
+            expiresIn: 1200
         });
     const REFRESH_TOKEN = jwt.sign({
             sub: user._id,
@@ -18,7 +18,7 @@ function generateTokens(user)  {
             type: 'REFRESH_TOKEN'
         },
         process.env.SECRET, {
-            expiresIn: 480
+            expiresIn: 4800
         });
     return {
         accessToken: ACCESS_TOKEN,
@@ -28,7 +28,7 @@ function generateTokens(user)  {
 
 const authenticate = function (req, res,next) {
 
-    User.findOne({email:req.body.email}).select(['username','email','hash','createdDate']).exec((err,result)=>{
+    User.findOne({email:req.body.email}).select(['username','email','hash','createdDate','userRole','avatarImage']).exec((err,result)=>{
         if(err) next(err);
         else if(result==null) res.status(404).send("User not found")
         else{
@@ -63,7 +63,7 @@ const verify = function (req, res, next) {
         if (err) {
             return res.status(401).send("Token is invalid");
         }
-        req.body.user_id = decoded.sub;
+        req.body.user = decoded.sub;
         next();
     });
 };

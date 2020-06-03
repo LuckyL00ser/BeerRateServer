@@ -1,10 +1,27 @@
 import Brewery from '../models/brewery';
+import Beer from "../models/beer";
+import Opinion from "../models/opinion";
 
 const getById = function (req, res,next) {
-    Brewery.findOne({_id:req.params.id},(err,result)=>{
+    Brewery.findOne({_id:req.params.id}).populate('user').exec((err,result)=>{
         if(err) next(err);
-        else
-            res.send(result);
+        else{
+            Opinion.aggregate([
+                    {$match: {object: result._id}},
+                    {$group: {
+                            _id:"$object",
+                            avgRating:{ $avg: "$rating"}
+                        }},
+                ],
+                function (err,rating) {
+                    if(rating.length)
+                        result._doc.avgRating = rating[0].avgRating;
+
+
+                    res.send(result);
+                })
+        }
+
     })
 };
 const getNearbyBreweries = function (req, res,next) {
@@ -20,14 +37,13 @@ const getNearbyBreweries = function (req, res,next) {
     })
 };
 const index =  function (req, res,next) {
-    Brewery.find({...req.params},(err,result)=>{
+    Brewery.find({name: { $regex: (req.query.name?req.query.name:""), $options: 'i' }}).exec((err,result)=>{
         if(err) next(err);
         else
             res.send(result);
     })
 };
 const create = function (req, res, next) {
-    req.body.owner = req.body.user_id
     Brewery.create(req.body,(err,result)=>{
         if(err) return next(err);
         res.send(result);

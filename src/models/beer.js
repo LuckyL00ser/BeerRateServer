@@ -10,7 +10,9 @@ const beerSchema = new mongoose.Schema({
     brewery: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Brewery'
     },
+    user: {  type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     description: {type:String, required:true},
+    IBU: { type:Number},
     alcoholPercentage: {type:Number},
     image: {type:String},
     createdDate: { type: Date, default: Date.now }
