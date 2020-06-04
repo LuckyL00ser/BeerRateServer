@@ -29,6 +29,10 @@ export default [
         methods:['post']
     },
     {
+        path:'/users/',
+        methods:['get']
+    },
+    {
         path:'/auth/refresh',
         methods:['post']
     },

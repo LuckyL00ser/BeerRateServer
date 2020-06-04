@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     userRole: {
       type:'String',
       enum: ['consumer','breweryOwner','admin'],
-      default: 'breweryOwner'
+      default: 'consumer'
     },
     createdDate: {type: Date, default: Date.now}
 });
