@@ -10,14 +10,11 @@ import errorHandler from './helpers/errorHandler'
 dotenv.config();
 const app = express();
 
-
-
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use('/api',authController.verify,apiRoutes);
-//
 
 app.use(errorHandler);
 app.use(express.static(`${__dirname}/public/`));
